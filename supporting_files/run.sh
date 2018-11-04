@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VOLUME_HOME="/var/lib/mysql"
+VOLUME_HOME="/var/lib/percona-server"
 
 if [ -e /etc/php/5.6/apache2/php.ini ]
 then
@@ -26,17 +26,17 @@ if [ -n "$VAGRANT_OSX_MODE" ];then
     usermod -u $DOCKER_USER_ID www-data
     groupmod -g $(($DOCKER_USER_GID + 10000)) $(getent group $DOCKER_USER_GID | cut -d: -f1)
     groupmod -g ${DOCKER_USER_GID} staff
-    chmod -R 770 /var/lib/mysql
+    chmod -R 770 /var/lib/percona-server
     chmod -R 770 /var/run/mysqld
-    chown -R www-data:staff /var/lib/mysql
+    chown -R www-data:staff /var/lib/percona-server
     chown -R www-data:staff /var/run/mysqld
 else
     # Tweaks to give Apache/PHP write permissions to the app
     chown -R www-data:staff /var/www
     chown -R www-data:staff /app
-    chown -R www-data:staff /var/lib/mysql
+    chown -R www-data:staff /var/lib/percona-server
     chown -R www-data:staff /var/run/mysqld
-    chmod -R 770 /var/lib/mysql
+    chmod -R 770 /var/lib/percona-server
     chmod -R 770 /var/run/mysqld
 fi
 

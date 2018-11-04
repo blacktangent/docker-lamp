@@ -1,6 +1,5 @@
 FROM phusion/baseimage
 MAINTAINER Ole J. Rosendahl <ole@blacktangent.com>
-ENV REFRESHED_AT 2018-08-21
 
 # based on mattrayner/lamp
 # MAINTAINER Matthew Rayner <hello@rayner.io>
@@ -26,7 +25,7 @@ RUN add-apt-repository -y ppa:ondrej/php && \
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C && \
   apt-get update && \
   apt-get -y upgrade && \
-  apt-get -y install supervisor wget git apache2 memcached php-xdebug libapache2-mod-php5.6 mysql-server php5.6 php5.6-mysql pwgen php-memcache php5.6-apc php5.6-mcrypt php5.6-gd php5.6-xml php5.6-mbstring php5.6-gettext zip unzip php5.6-zip curl php5.6-curl && \
+  apt-get -y install supervisor wget git apache2 memcached php-xdebug libapache2-mod-php5.6 percona-server-server-5.6 php5.6 php5.6-mysql pwgen php-memcache php5.6-apc php5.6-mcrypt php5.6-gd php5.6-xml php5.6-mbstring php5.6-gettext zip unzip php5.6-zip curl php5.6-curl && \
   apt-get -y autoremove && \
   echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
@@ -56,7 +55,7 @@ RUN sed -i "s/;date.timezone =/date.timezone = Europe\/London/g" /etc/php/5.6/ap
 RUN sed -i "s/;date.timezone =/date.timezone = Europe\/London/g" /etc/php/5.6/cli/php.ini
 
 # Remove pre-installed database
-RUN rm -rf /var/lib/mysql
+RUN rm -rf /var/lib/percona-server
 
 # Add MySQL utils
 ADD supporting_files/create_mysql_users.sh /create_mysql_users.sh
@@ -89,7 +88,7 @@ ENV PHP_UPLOAD_MAX_FILESIZE 10M
 ENV PHP_POST_MAX_SIZE 10M
 
 # Add volumes for the app and MySql
-VOLUME  ["/etc/mysql", "/var/lib/mysql", "/app" ]
+VOLUME  ["/etc/mysql", "/var/lib/percona-server", "/app" ]
 
 EXPOSE 80 3306
 CMD ["/run.sh"]
